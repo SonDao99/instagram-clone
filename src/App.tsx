@@ -1,28 +1,35 @@
+import React from 'react';
 import './App.scss';
-import { BrowserRouter, Routes, Route, Link} from "react-router-dom";
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Home from './pages/Home';
 import Profile from "./pages/Profile";
-import { useState } from 'react';
+import Login from './pages/Login';
+
+import RequireAuth from './components/RequireAuth/RequireAuth';
+
 
 function App():JSX.Element {
-  const [loggedIn, setLoggedIn] = useState(true);
 
   return (
     <div className="App">
       <BrowserRouter>
-        
-        {loggedIn?
-          <nav>
-            <Link to="/">Home</Link>
-            <Link to="/profile">Profile</Link>
-          </nav>
-          :
-          <></>
-        }
 
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/" element={
+            <RequireAuth>
+              <Home />
+            </RequireAuth>
+          } />
+          
+          <Route path="/profile" element={
+            <RequireAuth>
+              <Profile />
+            </RequireAuth>
+          } />
+
+          <Route path="/login" element={<Login />} />
         </Routes>
 
       </BrowserRouter>

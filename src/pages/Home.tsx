@@ -1,11 +1,14 @@
-import {signInWithPopup} from "firebase/auth"
+import { signInWithPopup } from "firebase/auth"
+import NavBar from "../components/NavBar/NavBar"
 import { auth, provider } from "../firebase-config"
 
 const Home = ():JSX.Element => {
-  
 
   return(
-    <div>Home</div>
+    <>
+      <NavBar />
+      <div>Home</div>
+    </>
   )
 }
 

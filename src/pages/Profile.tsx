@@ -1,6 +1,11 @@
+import NavBar from "../components/NavBar/NavBar";
+
 const Profile = ():JSX.Element => {
   return(
-    <div>Profile</div>
+    <>
+      <NavBar />
+      <div>Profile</div>
+    </>
   )
 }
 
