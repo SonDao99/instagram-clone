@@ -2,3 +2,21 @@ nav {
   display: flex;
   gap: 20px;
 }
+
+html, body, .App, #root {
+  height: 100%;
+  margin: 0;
+}
+
+.flex-center-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-column-center-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

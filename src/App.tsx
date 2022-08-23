@@ -7,7 +7,8 @@ import Home from './pages/Home';
 import Profile from "./pages/Profile";
 import Login from './pages/Login';
 
-import RequireAuth from './components/RequireAuth/RequireAuth';
+import RequireAuth from './helpers/RequireAuth';
+import NavigateHomeIfAuthed from './helpers/NavigateHomeIfAuthed';
 
 
 function App():JSX.Element {
@@ -29,7 +30,11 @@ function App():JSX.Element {
             </RequireAuth>
           } />
 
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={
+            <NavigateHomeIfAuthed>
+              <Login />
+            </NavigateHomeIfAuthed>
+          } />
         </Routes>
 
       </BrowserRouter>
