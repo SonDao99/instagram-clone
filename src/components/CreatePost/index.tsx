@@ -52,24 +52,21 @@ const CreatePost = ({ setCreatingPost }:{ setCreatingPost: React.Dispatch<React.
     switch(postStatus) {
       case "none":
         return(
-          <>
-            <div className="create-post-box-header">Create new post</div>
-            <div className="create-post-box-content flex-column-center-center">
-              <form className="flex-column-center-center" onDrop={(e) => handleDrop(e)} onDragOver={(e) => handleDragOver(e)}>
-                <label 
-                  className="flex-column-center-center"
-                  htmlFor="uploadFile"
-                  onClick={(e) => handleClickLabel(e)}
-                > 
-                  <div>Drag photos and videos here</div>
-                  <button  type="button" onClick={() => handleClickUpload()} className="btn-upload-file">
-                    Select from computer
-                  </button>
-                </label>
-                <input ref={inputRef} onChange={(e) => handleUpload(e)} type="file" id="uploadFile" name="uploadFile"/>
-              </form>
-            </div>
-          </>
+          <div className="create-post-box-content flex-column-center-center">
+            <form className="flex-column-center-center" onDrop={(e) => handleDrop(e)} onDragOver={(e) => handleDragOver(e)}>
+              <label 
+                className="flex-column-center-center"
+                htmlFor="uploadFile"
+                onClick={(e) => handleClickLabel(e)}
+              > 
+                <div>Drag photos and videos here</div>
+                <button  type="button" onClick={() => handleClickUpload()} className="btn-upload-file">
+                  Select from computer
+                </button>
+              </label>
+              <input ref={inputRef} onChange={(e) => handleUpload(e)} type="file" id="uploadFile" name="uploadFile"/>
+            </form>
+          </div>
         );
 
       case "uploaded":
@@ -91,6 +88,7 @@ const CreatePost = ({ setCreatingPost }:{ setCreatingPost: React.Dispatch<React.
         <button onClick={() => handleClickClose()}>X</button>
       </div>
       <div className="create-post-box">
+        <div className="create-post-box-header">Create new post</div>
         <PostComponent />
       </div>
     </div>
