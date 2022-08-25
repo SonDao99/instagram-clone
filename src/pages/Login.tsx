@@ -3,18 +3,31 @@ import { signInWithPopup } from "firebase/auth";
 import { login } from "../features/auth/auth";
 import { useAppDispatch } from "../app/hooks";
 import { useNavigate } from "react-router-dom";
-
+import { db } from "../firebase-config";
+import { collection, doc, getDocs, getFirestore, setDoc } from "firebase/firestore";
 
 const Login = ():JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const signInWithGoogle = () => {
-    signInWithPopup(auth, provider)
-      .then((resp) => {
-        dispatch(login({isAuthenticated: true, userName: resp.user.displayName || "User"}));
-        navigate("/");
-      })
+  const signInWithGoogle = async () => {
+    const response = await signInWithPopup(auth, provider);
+
+    const usersQuery = await getDocs(collection(getFirestore(), 'users'));
+
+    const userExists = usersQuery.docs.find((user) => {
+      return user.id === response.user.uid;
+    })
+
+    if (userExists) {
+      dispatch(login({isAuthenticated: true, userName: response.user.displayName || "User"}));
+      navigate("/");  
+    } else {
+      const newUserRef = doc(db, 'users', response.user.uid);
+      setDoc(newUserRef, {userName: response.user.displayName});
+      dispatch(login({isAuthenticated: true, userName: response.user.displayName || "User"}));
+      navigate("/");
+    }
   }
 
   return(

@@ -1,0 +1,47 @@
+.upload-file {
+  z-index: 2;
+  height: 540px;
+  width: 500px;
+  border-radius: 15px;
+  background-color: white;
+  overflow: hidden;
+
+  &-header {
+    font-weight: 600;
+    font-size: 15px;
+    height: 40px;
+    padding: 10px;
+    margin-top: 5px;
+    text-align: center;
+    border-bottom: 1px solid rgb(199, 199, 199);
+  }
+
+  &-content {
+    height: 500px;
+
+    input[type="file"] {
+      display: none;
+    }
+
+    form {
+      height: 100%;
+      width: 100%;
+    }
+
+    label {
+      height: 100%;
+      width: 100%;
+    }
+  
+    .btn-upload-file {
+      font-family: inherit;
+      font-size: 15px;
+      padding: 5px 10px;
+      border: none;
+      background-color: #0095f6;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  }
+}

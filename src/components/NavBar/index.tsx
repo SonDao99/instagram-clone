@@ -9,7 +9,7 @@ import CreatePost from "../CreatePost";
 
 const NavBar = () => {
   const dispatch = useAppDispatch();
-  const [creatingPost, setCreatingPost] = useState(true);
+  const [creatingPost, setCreatingPost] = useState(false);
 
   const handleClickSignOut = () => {
     dispatch(logout());

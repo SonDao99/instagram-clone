@@ -1,0 +1,48 @@
+.write-caption {
+  z-index: 2;
+  height: 540px;
+  width: 800px;
+  border-radius: 15px;
+  background-color: white;
+  overflow: hidden;
+
+  &-header {
+    font-weight: 600;
+    font-size: 15px;
+    height: 40px;
+    padding: 10px;
+    margin-top: 5px;
+    border-bottom: 1px solid rgb(199, 199, 199);
+    width: 100%;
+  }
+
+  &-content {
+    height: 500px;
+    
+    .profile-pic {
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      border: solid 1px black;
+      text-align: center;
+    }
+
+    form {
+      width: 300px;
+      height: 100%;
+
+      textarea {
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        resize: none;
+        outline: none !important;
+        border: none !important;
+        
+        :focus {
+          border-style: none;
+        }
+      }
+    }
+  }
+}

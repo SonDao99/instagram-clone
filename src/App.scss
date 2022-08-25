@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 nav {
   display: flex;
   gap: 20px;
@@ -6,6 +10,30 @@ nav {
 html, body, .App, #root {
   height: 100%;
   margin: 0;
+}
+
+.padding-10 {
+  padding: 10px;
+}
+
+.gap-10 {
+  gap: 10px;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-space-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-start-center {
+  display: flex;
+  justify-content: start;
+  align-items: center;
 }
 
 .flex-center-center {
