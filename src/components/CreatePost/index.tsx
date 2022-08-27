@@ -30,7 +30,7 @@ const CreatePost = ({ setCreatingPost }:{ setCreatingPost: React.Dispatch<React.
     case "uploaded":
       const imageBlob = new Blob([file as unknown as BlobPart], {type: file.type})
       const imageURL = URL.createObjectURL(imageBlob); 
-      PostComponent = <WriteCaption imageURL={imageURL} setPostStatus={setPostStatus}/>
+      PostComponent = <WriteCaption imageURL={imageURL} imageBlob={imageBlob} setPostStatus={setPostStatus}/>
       break;
     default:
       PostComponent = null;

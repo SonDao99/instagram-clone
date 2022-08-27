@@ -24,7 +24,13 @@ const Login = ():JSX.Element => {
       navigate("/");  
     } else {
       const newUserRef = doc(db, 'users', response.user.uid);
-      setDoc(newUserRef, {userName: response.user.displayName});
+      setDoc(newUserRef, 
+        {
+          userName: response.user.displayName,
+          followers: [],
+          following: [],
+        }
+      );
       dispatch(login({isAuthenticated: true, userName: response.user.displayName || "User"}));
       navigate("/");
     }
