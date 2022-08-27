@@ -13,12 +13,15 @@ interface WriteCaptionProps {
   imageURL: string,
   imageBlob: Blob,
   setPostStatus: React.Dispatch<React.SetStateAction<PostStatus>>,
+  setCreatingPost: React.Dispatch<React.SetStateAction<boolean>>,
 }
 
 const WriteCaption = (props: WriteCaptionProps) => {
-  const { imageURL, imageBlob, setPostStatus } = props;
+  const { imageURL, imageBlob, setPostStatus, setCreatingPost } = props;
   const id = useId();
   const[caption, setCaption] = useState('');
+  const [loading, setLoading] = useState(false);
+  const currentUser = useAppSelector(selectAuth).userName;
 
   const handleClickBack = () => {
     setPostStatus('none');
@@ -29,6 +32,8 @@ const WriteCaption = (props: WriteCaptionProps) => {
   }
 
   const handleClickShare = async () => {
+    setLoading(true);
+    
     const filePath = `${getAuth().currentUser?.uid}/${id}`;
     const newImageRef = ref(getStorage(), filePath);
     const fileSnapshot = await uploadBytesResumable(newImageRef, imageBlob)
@@ -38,6 +43,7 @@ const WriteCaption = (props: WriteCaptionProps) => {
     const newPostRef = doc(db, 'posts', id);
     setDoc(newPostRef, 
       {
+        posterID: getAuth().currentUser?.uid,
         imageUrl: publicImageUrl,
         storageUri: fileSnapshot.metadata.fullPath,
         caption: caption,
@@ -45,6 +51,31 @@ const WriteCaption = (props: WriteCaptionProps) => {
         comments: [],
       }
     )
+
+    setCreatingPost(false);
+  }
+
+  let ImageOrLoading;
+  switch (loading) {
+    case true:
+      ImageOrLoading = <div className="write-caption-content flex">Loading...</div>
+      break;
+    default:
+      ImageOrLoading =
+        <div className="write-caption-content flex">
+          <div className="write-caption-content-image">
+            <img src={imageURL} alt="uploadedImage" />
+          </div>
+          <div className="write-caption-content-text">
+            <div className="user-info flex-start-center padding-10 gap-10">
+              <img className="profile-pic" alt="DP" />
+              <p>{currentUser}</p>
+            </div>
+            <form>
+              <textarea onChange={(e) => handleChangeCaption(e)} placeholder="Write a caption..."></textarea>
+            </form>
+          </div>
+        </div>
   }
 
   return(
@@ -54,20 +85,9 @@ const WriteCaption = (props: WriteCaptionProps) => {
         <p>Create new post</p>
         <button onClick={() => handleClickShare()}>share</button>
       </div>
-      <div className="write-caption-content flex">
-        <div className="write-caption-content-image">
-          <img src={imageURL} alt="uploadedImage" />
-        </div>
-        <div className="write-caption-content-text">
-          <div className="user-info flex-start-center padding-10 gap-10">
-            <img className="profile-pic" alt="DP" />
-            <p>{useAppSelector(selectAuth).userName}</p>
-          </div>
-          <form>
-            <textarea onChange={(e) => handleChangeCaption(e)} placeholder="Write a caption..."></textarea>
-          </form>
-        </div>
-      </div>
+
+      {ImageOrLoading}
+    
     </div>
   )
 }
