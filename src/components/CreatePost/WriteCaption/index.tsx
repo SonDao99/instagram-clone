@@ -1,4 +1,4 @@
-import React, { useId, useState } from "react";
+import React, { useState } from "react";
 import "./style.scss";
 import { useAppSelector } from "../../../app/hooks";
 import { selectAuth } from "../../../features/auth/auth";
@@ -7,7 +7,7 @@ import { db } from "../../../firebase-config";
 import { doc, setDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
-
+import { v4 as uuidv4 } from "uuid";
 
 interface WriteCaptionProps {
   imageURL: string,
@@ -18,7 +18,6 @@ interface WriteCaptionProps {
 
 const WriteCaption = (props: WriteCaptionProps) => {
   const { imageURL, imageBlob, setPostStatus, setCreatingPost } = props;
-  const id = useId();
   const[caption, setCaption] = useState('');
   const [loading, setLoading] = useState(false);
   const currentUser = useAppSelector(selectAuth).userName;
@@ -34,13 +33,14 @@ const WriteCaption = (props: WriteCaptionProps) => {
   const handleClickShare = async () => {
     setLoading(true);
     
-    const filePath = `${getAuth().currentUser?.uid}/${id}`;
+    const postID = uuidv4();
+    const filePath = `${getAuth().currentUser?.uid}/${postID}`;
     const newImageRef = ref(getStorage(), filePath);
     const fileSnapshot = await uploadBytesResumable(newImageRef, imageBlob)
 
     const publicImageUrl = await getDownloadURL(newImageRef);
 
-    const newPostRef = doc(db, 'posts', id);
+    const newPostRef = doc(db, 'posts', postID);
     setDoc(newPostRef, 
       {
         posterID: getAuth().currentUser?.uid,
