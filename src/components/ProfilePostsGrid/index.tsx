@@ -1,7 +1,7 @@
 import { getAuth } from "firebase/auth";
-import { collection, getDocs, getFirestore, doc, onSnapshot } from "firebase/firestore";
+import { collection, getFirestore, onSnapshot, query, orderBy, Timestamp } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { db } from "../../firebase-config";
+import "./style.scss";
 
 interface PostObject {
   imageUrl: string,
@@ -10,34 +10,40 @@ interface PostObject {
   storageUri: string,
   comments: string[],
   likes: string[],
+  timeStamp: Timestamp,
 }
 
 const ProfilePostGrid = () => {
   const [userPosts, setUserPosts] = useState<PostObject[]>([]);
   const [postsID, setPostsID] = useState<string[]>([])
   const [loadingPosts, setLoadingPosts] = useState(true);
-  
-  const getPosts = async () => {
-    let newUserPostsArray: PostObject[] = [];
-    let newPostsID: string[] = [];
-    const postsQuery = await getDocs(collection(getFirestore(), 'posts'));
 
-    const currentUserID = getAuth().currentUser?.uid;
-    postsQuery.docs.forEach(post => {
-      if (post.data().posterID === currentUserID) {
-        newUserPostsArray = [post.data() as PostObject, ...newUserPostsArray];
-        newPostsID = [post.id, ...newPostsID];
-      }
+  const getPosts = () => {
+    const postsRef = collection(getFirestore(), "posts");
+    
+    const postsQuery = query(postsRef, orderBy("timeStamp", "asc"));
+
+    onSnapshot(postsQuery, (posts) => {
+      const currentUserID = getAuth().currentUser?.uid;
+      let newUserPostsArray: PostObject[] = [];
+      let newPostsID: string[] = [];
+
+      posts.docs.forEach(post => {
+        if (post.data().posterID === currentUserID) {
+          newUserPostsArray = [post.data() as PostObject, ...newUserPostsArray];
+          newPostsID = [post.id, ...newPostsID];
+        }
+      })
+
+      setUserPosts(newUserPostsArray);
+      setPostsID(newPostsID);
+      setLoadingPosts(false);
     })
-
-    setUserPosts(newUserPostsArray);
-    setPostsID(newPostsID);
-    setLoadingPosts(false);
   }
-  
+
   useEffect(() => {
     getPosts();
-  }, [])
+  }, []);
 
   return(
     <>
@@ -45,7 +51,7 @@ const ProfilePostGrid = () => {
         <div>Loading...</div>
         :
         userPosts.map((post, i) => {
-          return <img key={postsID[i]} style={{width: "300px", height: "300px", objectFit: "cover"}} alt={`user post ${i}`} src={post.imageUrl}/>
+          return <img className="posts-grid-image" key={postsID[i]} alt={`user post ${i}`} src={post.imageUrl}/>
         })
       }
     </>

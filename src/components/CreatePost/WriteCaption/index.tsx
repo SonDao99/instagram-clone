@@ -4,7 +4,7 @@ import { useAppSelector } from "../../../app/hooks";
 import { selectAuth } from "../../../features/auth/auth";
 import { PostStatus } from "..";
 import { db } from "../../../firebase-config";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
@@ -49,6 +49,7 @@ const WriteCaption = (props: WriteCaptionProps) => {
         caption: caption,
         likes: [],
         comments: [],
+        timeStamp: serverTimestamp(),
       }
     )
 
@@ -83,7 +84,7 @@ const WriteCaption = (props: WriteCaptionProps) => {
       <div className="write-caption-header flex-space-between">
         <button onClick={() => handleClickBack()}>&lt;--</button>
         <p>Create new post</p>
-        <button onClick={() => handleClickShare()}>share</button>
+        { loading ? <div></div> : <button onClick={() => handleClickShare()}>share</button> }
       </div>
 
       {ImageOrLoading}
